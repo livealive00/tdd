@@ -12,17 +12,25 @@ package tdd.currency;
  * @author 박성현[kr17352@navercorp.com]
  * @version 1.0
  */
-public class Money {
+public class Money implements Expression {
 
 	protected int amount;
 	protected String currency;
+	
+	static Dollar dollar(int amout) {
+		return new Dollar(amout, "USD");
+	}
+	
+	static Franc franc(int amount) {
+		return new Franc(amount, "CHF");
+	}
 	
 	public Money(int amount, String currency) {
 		this.amount = amount;
 		this.currency = currency;
 	}
 	
-	Money times(int multiplier) {
+	public Money times(int multiplier) {
 		return new Money(amount * multiplier, currency);
 	}
 	
@@ -38,11 +46,21 @@ public class Money {
 			
 	}
 
-	static Dollar dollar(int amout) {
-		return new Dollar(amout, "USD");
+	/**
+	 * @param five
+	 * @return
+	 */
+	public Expression plus(Money addend) {
+		return new Sum(this, addend);
 	}
-	
-	static Franc franc(int amount) {
-		return new Franc(amount, "CHF");
+
+	/**
+	 * @param to
+	 * @return
+	 * @see tdd.currency.Expression#reduce(java.lang.String)
+	 */
+	@Override
+	public Money reduce(String to) {
+		return this;
 	}
 }
